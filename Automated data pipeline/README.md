@@ -101,10 +101,10 @@ After a successful run, open Power BI and **Refresh** (Import mode).
 
 ## How it works (stage by stage)
 
-1. **Load raw** — reads the 5 raw CSVs as text so nothing is silently coerced.
+1. **Load raw** - reads the 5 raw CSVs as text so nothing is silently coerced.
    Text placeholders `null`/`None`/`NaN`/`""` become real `NaN`.
 
-2. **Clean** (returns DB-ready frames — **integer keys, ISO `YYYY-MM-DD` dates,
+2. **Clean** (returns DB-ready frames - **integer keys, ISO `YYYY-MM-DD` dates,
    numeric money**):
    - Keys `INV-1001`, `CUST001`, `CAT01`… are stripped to integers to match the
      Supabase schema (`invoice_id`, `customer_id`, … are `integer`).
@@ -133,7 +133,7 @@ After a successful run, open Power BI and **Refresh** (Import mode).
      `--allow-drop-orphans`).
    - Non-fatal quality checks printed: GST rule, `incl ≈ excl + gst`, `due ≥ issue`.
 
-3. **Forecast — `forecast_by_invoice`** (one row per unpaid invoice). This follows a
+3. **Forecast - `forecast_by_invoice`** (one row per unpaid invoice). This follows a
    deliberate, documented method:
    - **Lag is measured against the DUE date**, not the issue date:
      `lag = payment_date − due_date` (positive = late, negative = early). Collection
@@ -146,15 +146,15 @@ After a successful run, open Power BI and **Refresh** (Import mode).
      was built on averages.
    - **Fallback ladder** (with the source tracked so you can report how much of the
      forecast rests on real member history):
-     - **member** — customer's own lag, if it has ≥ `MIN_CUSTOMER_HISTORY` paid invoices (default 3);
-     - **tier** — the member_tier lag, if ≥ `MIN_TIER_HISTORY` (default 3);
-     - **overall** — the whole-book lag otherwise.
+     - **member** - customer's own lag, if it has ≥ `MIN_CUSTOMER_HISTORY` paid invoices (default 3);
+     - **tier** - the member_tier lag, if ≥ `MIN_TIER_HISTORY` (default 3);
+     - **overall** - the whole-book lag otherwise.
      The run prints the member/tier/overall percentage mix.
      The run prints the member/tier/overall percentage mix (≈57% / 43% / 0% here).
    - `lag_used` stores the numeric lag; `lag_source` records which rule fired.
    - `expected_collection = normalize(due_date + lag_used)` (normalised to a whole day
      so fractional medians like 1.5 don't land mid-day and corrupt week bucketing).
-   - **Overdue handling — the headline caveat (DECISIONS.md D4):** `already_overdue`
+   - **Overdue handling - the headline caveat (DECISIONS.md D4):** `already_overdue`
      is set when the *projection itself* lands before the first forecast day
      (`normalize(due + lag) < snapshot + 1`), not merely when the due date is past.
      Those invoices are **clamped into the first forecast week** and flagged, so week 1
@@ -164,32 +164,32 @@ After a successful run, open Power BI and **Refresh** (Import mode).
    - Snapshot date is configurable (`--snapshot`, default **2026-03-31**);
      `forecast_start = snapshot + 1 day`.
 
-4. **Forecast — `forecast_weekly`** (rolled up from `forecast_by_invoice`):
+4. **Forecast - `forecast_weekly`** (rolled up from `forecast_by_invoice`):
    - `week_start` = Monday of the week of `expected_collection`.
    - `normal_flow` = Σ amount where **not** already_overdue;
      `overdue_backlog` = Σ amount where already_overdue; `amount` = their sum.
    - `cumulative` = running total by week; `pct_of_book` = cumulative / grand total × 100.
    - Money rounded to 2 dp, `pct_of_book` to 2 dp.
 
-5. **DimDate** — generated to span every date used by FactInvoice
+5. **DimDate** - generated to span every date used by FactInvoice
    (issue/due/payment), `forecast_by_invoice.expected_collection` and
    `forecast_weekly.week_start`. Columns: `date_key` (YYYYMMDD int), `date`,
    `year`, `quarter`, `month_no`, `month_name`.
 
-6. **Referential validation (hard gate)** — before anything is written or loaded:
+6. **Referential validation (hard gate)** - before anything is written or loaded:
    every FactInvoice `customer_id`/`category`/`status`/`payment_method` (unless
    blank) and every `issue_date`/`due_date`/non-blank `payment_date` must exist in
    its dimension; every `forecast_by_invoice` `customer_id`/`status`/
    `expected_collection` must exist too. Any miss aborts the run.
 
-7. **Compare with previous run** — before overwriting anything, if processed CSVs
+7. **Compare with previous run** - before overwriting anything, if processed CSVs
    already exist the pipeline prints **old → new** row counts per table and the key
    money totals (total invoiced, forecast total by invoice, forecast total weekly),
    flagging what changed. This lets you see whether the regenerated forecast differs
    from the data currently behind your dashboard. Then the 8 clean CSVs are written
    to `data/processed/`.
 
-8. **(Optional) rebuild schema, then load to Supabase** — via SQLAlchemy
+8. **(Optional) rebuild schema, then load to Supabase** - via SQLAlchemy
    (`postgresql+psycopg2`).
    - With `--rebuild-schema`, `rebuild_schema()` first runs `sql/create_schema.sql`
      (DROP + CREATE of all tables, constraints, and indexes). The SQL file wraps
@@ -202,7 +202,7 @@ After a successful run, open Power BI and **Refresh** (Import mode).
      `incl = excl + gst`, `due ≥ issue`, the paid/unpaid payment rule, tier/terms
      value sets), so validated output loads without constraint errors.
 
-9. **Validation report** — row counts per table, total invoiced, open-AR total,
+9. **Validation report** - row counts per table, total invoiced, open-AR total,
    forecast total from both forecast tables, and a **hard assertion** that
    `forecast_by_invoice` and `forecast_weekly` totals agree within tolerance.
 
