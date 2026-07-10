@@ -1,5 +1,5 @@
 """
-pipeline.py — End-to-end AR & Cash-Flow Forecast automation.
+pipeline.py - End-to-end AR & Cash-Flow Forecast automation.
 
     python pipeline.py                 # clean -> forecast -> export -> load to Supabase
     python pipeline.py --skip-load     # everything except the database load
@@ -57,13 +57,13 @@ GST_RULE_TOL = 0.02       # matches the DB ck_gst_rule tolerance exactly
 FORECAST_TOL = 0.01       # forecast_by_invoice total must match forecast_weekly total within this
 
 # Minimum paid invoices before a member's OWN median lag is trusted; otherwise fall
-# back to their tier's median, otherwise the overall median (DECISIONS.md D3, N=3).
+# back to their tier's median, otherwise the overall median (N=3).
 # The tier level has no count threshold: a tier is used whenever it has any paid
-# history — only a missing/empty tier falls through to overall.
+# history - only a missing/empty tier falls through to overall.
 MIN_CUSTOMER_HISTORY = 3
 
-# Lag statistic used at every level: "median" (robust to a few very-late payers,
-# DECISIONS.md D2) or "mean". Both are computed and their divergence logged.
+# Lag statistic used at every level: "median" (robust to a few very-late payers)
+# or "mean". Both are computed and their divergence logged.
 LAG_STAT = "median"
 
 # Allowed / canonical value sets ------------------------------------------------------
@@ -369,7 +369,7 @@ def clean_fact(df: pd.DataFrame, customers: pd.DataFrame) -> pd.DataFrame:
     df["payment_method"] = df["payment_method"].apply(
         lambda v: np.nan if _is_blank(v) else METHOD_CANON.get(str(v).strip().lower(), "Unknown"))
 
-    # GST is taken straight from the source data — it is NOT recalculated. A blank /
+    # GST is taken straight from the source data - it is NOT recalculated. A blank /
     # missing GST means the invoice is GST-free (gst = 0). amount_excl_gst is set to
     # (incl - gst) so that incl = excl + gst always holds for the DB constraint,
     # without touching the source GST value.
@@ -534,7 +534,7 @@ def generate_forecast_by_invoice(fact: pd.DataFrame, customers: pd.DataFrame) ->
     mix = unpaid["lag_source"].value_counts(normalize=True).mul(100).round(1)
     log("forecast", "lag source mix: " + ", ".join(f"{k}={v}%" for k, v in mix.items()))
 
-    # Project each open invoice, then handle the past-due case (DECISIONS.md D4):
+    # Project each open invoice, then handle the past-due case:
     #   exp_raw = normalize(due_date + lag_used)   (normalise so fractional medians
     #                                               like 1.5 don't land mid-day)
     #   already_overdue = exp_raw < forecast_start (i.e. on/before the snapshot day)
@@ -553,8 +553,8 @@ def generate_forecast_by_invoice(fact: pd.DataFrame, customers: pd.DataFrame) ->
 
 
 def generate_forecast_weekly(fbi: pd.DataFrame) -> pd.DataFrame:
-    """Aggregate forecast_by_invoice into a Monday-anchored weekly collection schedule
-    (DECISIONS.md Step 5): expected cash per week, split into normal flow vs clamped
+    """Aggregate forecast_by_invoice into a Monday-anchored weekly collection schedule:
+    expected cash per week, split into normal flow vs clamped
     overdue backlog, with a cumulative 'cash build-up' and pct-of-book."""
     df = fbi.copy()
     exp = pd.to_datetime(df["expected_collection"])
@@ -609,7 +609,7 @@ def build_dim_date(all_dates: pd.Series) -> pd.DataFrame:
 
 
 # ======================================================================================
-# 4. RELATIONSHIP VALIDATION  (referential integrity — hard gate before load)
+# 4. RELATIONSHIP VALIDATION  (referential integrity - hard gate before load)
 # ======================================================================================
 
 def validate_relationships(t: dict) -> None:
@@ -644,7 +644,7 @@ def validate_relationships(t: dict) -> None:
     if errors:
         for e in errors:
             log("validate", f"  ERROR: {e}")
-        raise ValueError("Referential-integrity validation FAILED — nothing exported or loaded.")
+        raise ValueError("Referential-integrity validation FAILED - nothing exported or loaded.")
     log("validate", "referential integrity OK for all relationships")
 
 
@@ -712,7 +712,7 @@ def compare_with_previous(tables: dict) -> None:
 
     existing = {n for n in LOAD_ORDER if (PROCESSED_DIR / f"{n}.csv").exists()}
     if not existing:
-        log("compare", "no previous processed CSVs found — this is a first run, nothing to compare.")
+        log("compare", "no previous processed CSVs found - this is a first run, nothing to compare.")
         return
 
     log("compare", "row counts (previous -> new):")
@@ -776,7 +776,7 @@ def rebuild_schema(engine, schema_path="sql/create_schema.sql") -> None:
     """DROP and CREATE every table/constraint/index from the schema SQL file.
 
     WARNING: this destroys all existing data in those tables. The SQL file wraps
-    itself in BEGIN/COMMIT, so it runs atomically — any failure leaves the schema
+    itself in BEGIN/COMMIT, so it runs atomically - any failure leaves the schema
     untouched. Only invoked when the user passes --rebuild-schema.
     """
     path = Path(schema_path)
@@ -787,7 +787,7 @@ def rebuild_schema(engine, schema_path="sql/create_schema.sql") -> None:
 
     sql = path.read_text(encoding="utf-8")
     log("schema", "rebuilding database schema...")
-    log("schema", "WARNING: dropping and recreating ALL tables — existing data will be lost")
+    log("schema", "WARNING: dropping and recreating ALL tables - existing data will be lost")
     # AUTOCOMMIT so the script's own BEGIN/COMMIT controls the (single) transaction.
     with engine.connect().execution_options(isolation_level="AUTOCOMMIT") as conn:
         conn.exec_driver_sql(sql)
@@ -813,9 +813,9 @@ def load_to_supabase(tables: dict, engine) -> None:
                 to_load[name].to_sql(name, conn, if_exists="append", index=False,
                                      method="multi", chunksize=500)
                 log("load", f"inserted {name:<20} {len(to_load[name]):>5} rows")
-        log("load", "COMMIT — all tables loaded successfully")
+        log("load", "COMMIT - all tables loaded successfully")
     except Exception as exc:
-        log("load", f"ROLLBACK — load failed, database unchanged: {exc}")
+        log("load", f"ROLLBACK - load failed, database unchanged: {exc}")
         raise
 
 
@@ -939,7 +939,7 @@ def run(skip_load: bool, allow_drop_orphans: bool, allow_drop_bad_gst: bool,
     raw_st = read_raw("DimInvoiceStatus_raw.csv")
     log("load", f"read raw: fact={len(raw_fact)} customer={len(raw_cust)} +3 dims")
 
-    # 2. CLEAN (customers first — fact needs their payment terms)
+    # 2. CLEAN (customers first - fact needs their payment terms)
     customers = clean_customers(raw_cust)
     fact = clean_fact(raw_fact, customers)
     category = clean_category(raw_cat)
@@ -949,7 +949,7 @@ def run(skip_load: bool, allow_drop_orphans: bool, allow_drop_bad_gst: bool,
                  f"method={len(method)} status={len(status)}")
 
     # 2b. Fact rows whose customer_id has no matching customer cannot be modelled or
-    # loaded. Quarantine them to a CSV and STOP — unless --allow-drop-orphans is given.
+    # loaded. Quarantine them to a CSV and STOP - unless --allow-drop-orphans is given.
     orphans = ~fact["customer_id"].isin(set(customers["customer_id"]))
     add_stat("orphan_rows", int(orphans.sum()))
     if orphans.any():
@@ -969,7 +969,7 @@ def run(skip_load: bool, allow_drop_orphans: bool, allow_drop_bad_gst: bool,
         write_review_csv("_quarantine_orphan_fact.csv", fact.iloc[0:0])
 
     # 2c. GST integrity: source GST is trusted, but every row must satisfy the DB's
-    # ck_gst_rule — gst is 0 (GST-free) OR ~= incl/11. Rows that are neither (an
+    # ck_gst_rule - gst is 0 (GST-free) OR ~= incl/11. Rows that are neither (an
     # irregular GST rate in the source) are quarantined and the pipeline STOPS,
     # unless --allow-drop-bad-gst is given.
     bad_gst = (fact["gst"] != 0) & \

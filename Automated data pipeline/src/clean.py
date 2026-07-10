@@ -1,4 +1,4 @@
-"""clean.py — encodes every cleaning decision approved interactively, per table."""
+"""clean.py - encodes every cleaning decision approved interactively, per table."""
 import re
 import numpy as np
 import pandas as pd
@@ -75,7 +75,7 @@ def clean_fact(df, customers):
         df[c] = df[c].apply(to_number)
     issue = df["issue_date"].apply(parse_date)
     pay = df["payment_date"].apply(parse_date)
-    # status (Completeness) — derive blanks from payment + due
+    # status (Completeness) - derive blanks from payment + due
     due_raw = df["due_date"].apply(parse_date)
     snap = pd.Timestamp(C.SNAPSHOT)
     is_paid = pay.notna() | (df["amount_paid"].fillna(0) > 0)
@@ -87,7 +87,7 @@ def clean_fact(df, customers):
     df["category"] = df["category"].apply(lambda v: _canon(v, C.CATEGORY_CANON))         # Consistency
     df["payment_method"] = df["payment_method"].apply(
         lambda v: v if (pd.isna(v) or str(v).strip() == "") else C.METHOD_CANON.get(str(v).strip().lower(), str(v).strip()))
-    # Accuracy — GST recompute; pull dates into window; due = issue + terms
+    # Accuracy - GST recompute; pull dates into window; due = issue + terms
     df["gst"] = (df["amount_incl_gst"] / C.GST_DIVISOR).round(2)
     df["amount_excl_gst"] = (df["amount_incl_gst"] - df["gst"]).round(2)
     ps, pe = pd.Timestamp(C.PERIOD_START), pd.Timestamp(C.PERIOD_END)

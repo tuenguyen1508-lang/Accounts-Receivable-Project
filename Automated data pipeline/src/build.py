@@ -1,4 +1,4 @@
-"""build.py — DimDate generator + validation (referential integrity, GST, window)."""
+"""build.py - DimDate generator + validation (referential integrity, GST, window)."""
 import pandas as pd
 import config as C
 

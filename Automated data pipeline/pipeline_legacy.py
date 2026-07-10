@@ -1,5 +1,5 @@
 """
-pipeline.py — one command: raw six-table star in -> clean, joinable star out.
+pipeline.py - one command: raw six-table star in -> clean, joinable star out.
 
     python pipeline.py
 
@@ -35,7 +35,7 @@ def run():
     raw_st = R("DimInvoiceStatus_raw.csv")
     log("load", f"fact={len(raw_fact)} customer={len(raw_cust)} +3 small dims")
 
-    # 2. CLEAN  (customers first — fact needs their terms)
+    # 2. CLEAN  (customers first - fact needs their terms)
     customers = clean.clean_customers(raw_cust)
     fact = clean.clean_fact(raw_fact, customers)
     category = clean.clean_category(raw_cat)
@@ -65,7 +65,7 @@ def run():
         for e in rep["errors"]:
             log("validate", f"  ERROR: {e}")
         (C.PROCESSED_DIR / "_validation_report.json").write_text(json.dumps(rep, indent=2))
-        log("ABORT", "validation failed — nothing written.")
+        log("ABORT", "validation failed - nothing written.")
         sys.exit(1)
 
     # 4. WRITE the six joinable tables
