@@ -1,0 +1,4 @@
+status_id,status,description
+ST01,Paid,Invoice settled in full
+ST02,Open,"Unpaid, not yet due at snapshot"
+ST03,overdue,Unpaid and past due at snapshot

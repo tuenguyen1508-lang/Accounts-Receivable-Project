@@ -1,0 +1,5 @@
+method_id,payment_method,method_type
+PM01,eft ,Electronic
+PM02,Direct Debit,Electronic
+PM03,BPAY,
+PM04,Credit Card,Card
