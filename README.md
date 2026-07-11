@@ -6,7 +6,9 @@ Accounts receivable is a key part of short-term cash management. Organisations n
 
 This project analyses the accounts receivable position of **Molonglo Business Guild** for **Q3 FY26: January–March 2026**. It combines **Python**, **Supabase/PostgreSQL**, **Power BI**, and **AI-assisted reporting workflows** to create an end-to-end finance analytics solution covering data cleaning, database modelling, dashboard reporting, debtor risk analysis, short-term cash flow forecasting, and business insight generation.
 
-In addition to the technical pipeline, I developed structured Claude skills to support the generation of an analytical report and consultant-style slide deck. These AI-supported outputs were grounded in the Power BI dashboard findings and used to translate technical results into clear business recommendations.
+In addition to the technical pipeline, I developed structured Claude skills to support the generation of an analytical report and consultant-style slide deck. These AI-assisted outputs were grounded in the Power BI dashboard findings and used to translate technical results into clear business insights and recommendations.
+
+The Claude skills were developed as reusable reporting assets aligned with key business requirements and reporting standards. Each time the report or slide deck was generated, the instructions were refined to improve structure, accuracy, business storytelling, and recommendation quality. This makes the workflow adaptable to other datasets and analytics projects, where the same skills can be reused to generate consistent analysis reports and presentation decks.
 
 The analysis shows that the Guild’s cash position is broadly sound. The main issue is not widespread collection failure. Instead, the key risks are structural: sponsorship receivables are highly concentrated, and credit limits are not fully aligned with sponsorship-scale invoices.
 
