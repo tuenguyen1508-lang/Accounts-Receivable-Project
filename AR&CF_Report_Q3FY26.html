@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accounts Receivable &amp; Cash Flow Analysis - Molonglo Business Guild Q3 FY26</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+<style>
+:root{
+  --blue:#2563EB;--blue-soft:#DBEAFE;--blue-ink:#1E3A8A;
+  --orange:#EA580C;--orange-soft:#FFEDD5;
+  --green:#16A34A;--green-soft:#DCFCE7;
+  --gray:#94A3B8;--gray-soft:#E2E8F0;
+  --ink:#0F172A;--ink-2:#334155;--ink-3:#64748B;
+  --bg:#F6F8FB;--card:#FFFFFF;--maxw:1080px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"tnum" 1;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+.hero{background:linear-gradient(160deg,#0F2A6B,#1E3A8A 48%,#2563EB);color:#fff;padding:84px 0 72px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-120px;top:-80px;width:420px;height:420px;background:radial-gradient(circle,rgba(234,88,12,.35),transparent 62%)}
+.hero .wrap{position:relative;z-index:1}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#93C5FD;display:inline-flex;align-items:center;gap:10px;margin-bottom:22px}
+.eyebrow::before{content:"";width:28px;height:2px;background:var(--orange);display:inline-block}
+.hero h1{font-size:clamp(34px,5.4vw,58px);font-weight:900;letter-spacing:-.02em;line-height:1.05}
+.hero h1 .accent{color:#FDBA74}
+.hero .sub{font-size:clamp(16px,2vw,20px);color:#C7D7F5;max-width:700px;margin-top:20px}.hero .prepared{font-size:15px;color:#DBEAFE;margin-top:10px;font-weight:600}
+.hero .meta{display:flex;flex-wrap:wrap;gap:28px;margin-top:38px;padding-top:26px;border-top:1px solid rgba(255,255,255,.14)}
+.hero .meta div{font-size:13px;color:#9DB6E6}.hero .meta b{display:block;font-size:20px;font-weight:800;color:#fff}
+.exec{background:var(--card);margin-top:-36px;border-radius:18px;padding:38px 40px;box-shadow:0 18px 50px -24px rgba(15,42,107,.32);border:1px solid var(--gray-soft);position:relative;z-index:2}
+.exec .tag{font-size:11px;font-weight:700;letter-spacing:.16em;color:var(--orange);text-transform:uppercase}
+.exec h2{font-size:25px;font-weight:800;letter-spacing:-.015em;margin:10px 0 14px;line-height:1.25}
+.exec p{color:var(--ink-2);font-size:16px}.exec .pillrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.pill{font-size:13px;font-weight:600;padding:7px 14px;border-radius:999px;border:1px solid var(--gray-soft)}
+.pill.good{background:var(--green-soft);color:#15803D;border-color:#BBF7D0}
+.pill.warn{background:var(--orange-soft);color:#C2410C;border-color:#FED7AA}
+.pill.info{background:var(--blue-soft);color:var(--blue-ink);border-color:#BFDBFE}
+section.block{padding:58px 0 12px}
+.sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:8px}
+.sec-num{font-size:13px;font-weight:800;color:var(--blue);background:var(--blue-soft);width:34px;height:34px;flex:0 0 34px;border-radius:9px;display:flex;align-items:center;justify-content:center}
+.sec-eyebrow{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+.sec-title{font-size:clamp(21px,2.6vw,28px);font-weight:800;letter-spacing:-.018em;line-height:1.25;margin:6px 0 0}
+.sec-title .o{color:var(--orange)}.sec-title .b{color:var(--blue)}.sec-title .g{color:var(--green)}
+.sec-body{margin-left:50px}.sec-lead{color:var(--ink-2);font-size:15.5px;margin:14px 0 4px;max-width:780px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:26px}
+.kpi{background:var(--card);border:1px solid var(--gray-soft);border-radius:13px;padding:18px}
+.kpi .lbl{font-size:12px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em}
+.kpi .val{font-size:28px;font-weight:800;letter-spacing:-.02em;margin-top:8px}
+.kpi .val.green{color:var(--green)}.kpi .val.blue{color:var(--blue)}.kpi .note{font-size:12px;color:var(--ink-3);margin-top:3px}
+.viz{display:grid;grid-template-columns:1.45fr 1fr;gap:24px;margin-top:26px;align-items:stretch}
+.viz.two{grid-template-columns:1fr 1fr}
+.chart-card{background:var(--card);border:1px solid var(--gray-soft);border-radius:14px;padding:22px 22px 18px}
+.chart-card .ct{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.chart-card .cs{font-size:13px;color:var(--ink-3);margin:2px 0 14px}
+.chart-box{position:relative;height:300px}.chart-box.tall{height:340px}.chart-box.sm{height:240px}
+.insight{background:var(--card);border:1px solid var(--gray-soft);border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:14px}
+.insight .ih{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue)}
+.ins{display:flex;gap:11px;align-items:flex-start}
+.ins .dot{width:9px;height:9px;border-radius:50%;margin-top:7px;flex:0 0 9px}
+.ins.b .dot{background:var(--blue)}.ins.o .dot{background:var(--orange)}.ins.g .dot{background:var(--green)}.ins.n .dot{background:var(--gray)}
+.ins p{font-size:14px;color:var(--ink-2)}.ins b{color:var(--ink);font-weight:700}
+.callout{background:#F8FAFF;border-left:3px solid var(--blue);border-radius:8px;padding:13px 15px;font-size:13.5px;color:var(--ink-2);margin-top:18px}
+.callout.warn{background:#FFF8F4;border-left-color:var(--orange)}.callout b{color:var(--ink)}
+.diag-band{background:linear-gradient(180deg,#0F172A,#1E293B);color:#fff;padding:58px 0;margin-top:64px}
+.diag-band .sec-eyebrow{color:#94A3B8}.diag-band .sec-title{color:#fff}.diag-band .sec-num{background:rgba(37,99,235,.25);color:#93C5FD}.diag-band .sec-lead{color:#CBD5E1}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px;margin-left:50px}
+.step{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:22px}
+.step .n{font-size:11px;font-weight:700;letter-spacing:.14em;color:#93C5FD}.step h4{font-size:18px;font-weight:800;margin:8px 0 4px}
+.step .q{font-size:13px;color:#94A3B8;font-style:italic;margin-bottom:12px}.step p{font-size:13.5px;color:#CBD5E1}
+.step .out{margin-top:13px;padding-top:13px;border-top:1px solid rgba(255,255,255,.1);font-size:13px;color:#E2E8F0}.step .out b{color:#FDBA74}
+.step.s1{border-top:3px solid var(--blue)}.step.s2{border-top:3px solid #A855F7}.step.s3{border-top:3px solid var(--green)}
+.diag-viz{margin:34px 50px 0;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:22px}
+.diag-viz .ct{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#94A3B8}
+.diag-viz .cs{font-size:13px;color:#94A3B8;margin:2px 0 14px}.diag-chart{position:relative;height:260px}
+.root{margin:30px 50px 0;background:rgba(22,163,74,.12);border:1px solid rgba(22,163,74,.4);border-radius:14px;padding:20px 24px}
+.root .rl{font-size:11px;font-weight:700;letter-spacing:.14em;color:#4ADE80;text-transform:uppercase}.root p{font-size:15px;color:#E2E8F0;margin-top:8px}.root b{color:#fff}
+.concl{padding:64px 0 30px}.concl-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:28px}
+.takeaway{background:var(--card);border:1px solid var(--gray-soft);border-radius:14px;padding:22px 24px;position:relative}
+.takeaway .tn{font-size:30px;font-weight:900;color:var(--gray-soft);position:absolute;top:16px;right:22px}
+.takeaway h4{font-size:16px;font-weight:800;margin-bottom:7px;padding-right:40px}.takeaway p{font-size:13.5px;color:var(--ink-2)}
+.takeaway.tk-o{border-left:3px solid var(--orange)}.takeaway.tk-b{border-left:3px solid var(--blue)}.takeaway.tk-g{border-left:3px solid var(--green)}
+.recs{margin-top:34px;background:linear-gradient(135deg,var(--blue-ink),var(--blue));border-radius:16px;padding:34px 36px;color:#fff}
+.recs h3{font-size:20px;font-weight:800;margin-bottom:18px}.recs ol{list-style:none;counter-reset:r;display:grid;gap:14px}
+.recs li{counter-increment:r;display:flex;gap:14px;align-items:flex-start;font-size:14.5px;color:#DCE7FB}
+.recs li::before{content:counter(r);flex:0 0 26px;height:26px;background:rgba(255,255,255,.16);border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff}
+.recs li b{color:#fff}
+footer{padding:40px 0 60px;text-align:center;color:var(--ink-3);font-size:12.5px}
+footer .dq{max-width:760px;margin:0 auto 14px;font-size:12px;color:var(--gray);line-height:1.7}
+/* NEW: methodology & scope cards */
+.scope-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
+.scope-card{background:var(--card);border:1px solid var(--gray-soft);border-radius:13px;padding:18px 20px}
+.scope-card .sc-lbl{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+.scope-card .sc-val{font-size:14px;color:var(--ink-2);font-weight:500}
+.meth-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:22px}
+.meth-step{background:var(--card);border:1px solid var(--gray-soft);border-radius:13px;padding:18px 20px;border-top:3px solid var(--blue)}
+.meth-step .ms-num{font-size:12px;font-weight:800;color:var(--blue);margin-bottom:6px}
+.meth-step .ms-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.meth-step .ms-body{font-size:13px;color:var(--ink-2);line-height:1.5}
+/* NEW: finding-implication table */
+.fi-table{width:100%;border-collapse:collapse;margin-top:22px;font-size:14px}
+.fi-table th{background:var(--blue-soft);color:var(--blue-ink);font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding:12px 16px;text-align:left}
+.fi-table td{padding:14px 16px;border-bottom:1px solid var(--gray-soft);color:var(--ink-2);vertical-align:top}
+.fi-table tr:last-child td{border-bottom:none}
+.fi-table .fi-finding{font-weight:600;color:var(--ink)}
+.fi-table .fi-arrow{color:var(--blue);font-weight:700;text-align:center;width:40px}
+/* NEW: data notes section */
+.notes-section{padding:48px 0 12px}
+.notes-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+.note-item{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--ink-2);padding:12px 14px;background:var(--card);border:1px solid var(--gray-soft);border-radius:10px}
+.note-item .ni-dot{width:7px;height:7px;border-radius:50%;background:var(--gray);margin-top:6px;flex:0 0 7px}
+/* NEW: improvements section */
+.improve-list{list-style:none;counter-reset:imp;display:grid;gap:12px;margin-top:18px}
+.improve-list li{counter-increment:imp;display:flex;gap:14px;align-items:flex-start;font-size:14px;color:var(--ink-2);padding:14px 16px;background:var(--card);border:1px solid var(--gray-soft);border-radius:10px}
+.improve-list li::before{content:counter(imp);flex:0 0 28px;height:28px;background:var(--blue-soft);color:var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
+@media(max-width:880px){.kpis{grid-template-columns:repeat(2,1fr)}.viz,.viz.two{grid-template-columns:1fr}.steps,.concl-grid{grid-template-columns:1fr;margin-left:0}.diag-viz,.root,.sec-body{margin-left:0;margin-right:0}.scope-row,.meth-steps{grid-template-columns:1fr}.notes-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- ========== HERO ========== -->
+<header class="hero"><div class="wrap">
+  <h1>Accounts Receivable &amp; Cash Flow Analysis</h1>
+  <p class="sub">Molonglo Business Guild Q3 FY26 (Jan-Mar 2026)</p>
+  <p class="prepared">Prepared by: Minnie Nguyen</p>
+  <div class="meta">
+    <div><b>$2.02M</b>Outstanding Receivables</div>
+    <div><b>61.5%</b>Collection Rate</div>
+    <div><b>80%</b>Sponsorship Share</div>
+    <div><b>128</b>Members Over Limit</div>
+  </div>
+</div></header>
+
+<div class="wrap">
+
+  <!-- ========== EXECUTIVE SUMMARY ========== -->
+  <div class="exec">
+    <div class="tag">Executive Summary - Main Message</div>
+    <h2>The Guild's $2.02M receivables position is fundamentally sound - 53% is not yet due, and payment follow-up improved through the quarter.</h2>
+    <p>The headline 61.5% collection rate understates health because <b>$1.07M of the $2.02M owed simply hasn't reached its due date</b>. Only 17.9% of invoices are genuinely overdue. The real risks are narrower and specific: <b>sponsorship drives 80%</b> of outstanding receivables (revenue-type concentration) and <b>128 members (34%) exceed their credit limit</b> - but the main cause is limits undersized for sponsorship invoices, not poor payers. On-time collection <b>improved from 40% to 64%</b> through the quarter.</p>
+    <div class="pillrow">
+      <span class="pill good">On-time collection: 40% -> 64%</span>
+      <span class="pill warn">Sponsorship = 80% of outstanding receivables</span>
+      <span class="pill warn">128 members over credit limit</span>
+      <span class="pill info">80% of book clears by mid-April</span>
+    </div>
+  </div>
+
+  <!-- ========== DATA SOURCE & SCOPE (NEW) ========== -->
+  <section class="block">
+    <div class="sec-head"><div class="sec-num">ℹ</div><div>
+      <div class="sec-eyebrow">Context - What this analysis covers</div>
+      <h2 class="sec-title">Data Source and Scope</h2>
+    </div></div>
+    <div class="sec-body">
+      <p class="sec-lead">This analysis is a single-quarter cash position snapshot - it should not be interpreted as a long-term trend or seasonality analysis.</p>
+      <div class="scope-row">
+        <div class="scope-card"><div class="sc-lbl">Reporting Period</div><div class="sc-val">Q3 FY26 (January-March 2026). Based on invoice issue dates. Snapshot at 31 March 2026.</div></div>
+        <div class="scope-card"><div class="sc-lbl">Dataset</div><div class="sc-val">Synthetic accounts receivable dataset modelled on a Xero-style export, containing 2,520 invoices across 445 members.</div></div>
+        <div class="scope-card"><div class="sc-lbl">Analysis Type</div><div class="sc-val">Single-quarter descriptive + diagnostic snapshot. Forecast is based on payment timing (short-term cash collection), not machine learning.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== METHODOLOGY (NEW) ========== -->
+  <section class="block" style="padding-top:24px">
+    <div class="sec-head"><div class="sec-num">M</div><div>
+      <div class="sec-eyebrow">Approach - How the analysis was conducted</div>
+      <h2 class="sec-title">Methodology</h2>
+    </div></div>
+    <div class="sec-body">
+      <p class="sec-lead">The analysis follows a descriptive and diagnostic approach, structured across four stages:</p>
+      <div class="meth-steps">
+        <div class="meth-step"><div class="ms-num">01</div><div class="ms-title">Measure the Baseline</div><div class="ms-body">Measure the receivables position: total invoiced, collected, unpaid and overdue balances, how old unpaid invoices are, and unpaid GST tax amounts.</div></div>
+        <div class="meth-step"><div class="ms-num">02</div><div class="ms-title">Segment Receivables</div><div class="ms-body">Group outstanding receivables by invoice age, revenue type, customer, member tier, industry, and payment pattern to show where the money is sitting.</div></div>
+        <div class="meth-step"><div class="ms-num">03</div><div class="ms-title">Diagnose Structural Risk</div><div class="ms-body">Apply concentration analysis, credit-limit exposure testing, and invoice-size cause review (Confirm -> Isolate -> Explain).</div></div>
+        <div class="meth-step"><div class="ms-num">04</div><div class="ms-title">Forecast Cash Collection</div><div class="ms-body">Project expected cash inflows using payment-timing assumptions based on individual member history (52%) and member-tier estimate (48%).</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SECTION 01: OVERVIEW & AGING ========== -->
+  <section class="block">
+    <div class="sec-head"><div class="sec-num">01</div><div>
+      <div class="sec-eyebrow">Overview - What money is still owed?</div>
+      <h2 class="sec-title">$2.02M owed, but <span class="b">53% is not yet due</span> - the book is younger than it looks.</h2>
+    </div></div>
+    <div class="sec-body">
+      <p class="sec-lead">The Guild invoiced $5.25M in Q3 FY26. Over half the unpaid balance hasn't reached its due date - the aging profile is healthy.</p>
+      <div class="kpis">
+        <div class="kpi"><div class="lbl">Total Invoiced</div><div class="val blue">$5.25M</div></div>
+        <div class="kpi"><div class="lbl">Collected</div><div class="val green">$3.23M</div><div class="note">61.5% of invoiced</div></div>
+        <div class="kpi"><div class="lbl">Outstanding Receivables</div><div class="val">$2.02M</div><div class="note">38.5% still owed</div></div>
+        <div class="kpi"><div class="lbl">Overdue Invoices</div><div class="val">17.9%</div><div class="note">451 of 2,520</div></div>
+      </div>
+      <div class="viz">
+        <div class="chart-card">
+          <div class="ct">Outstanding Receivables by Aging Bucket</div>
+          <div class="cs">Percentage of the $2.02M outstanding balance - Current means not yet due</div>
+          <div class="chart-box"><canvas id="chart01"></canvas></div>
+        </div>
+        <div class="insight"><div class="ih">Highlighted Insights</div>
+          <div class="ins b"><span class="dot"></span><p><b>53% of outstanding receivables ($1.07M) is Current</b> - still within payment terms, not overdue. Only $945K has actually passed its due date.</p></div>
+          <div class="ins g"><span class="dot"></span><p><b>64% of overdue outstanding amount is under 30 days old</b> - $607K that's fresh and recoverable with routine follow-up before it ages into harder buckets.</p></div>
+          <div class="ins n"><span class="dot"></span><p>No invoices have reached 90+ days overdue. <b>Caveat:</b> the absence of deeply aged outstanding amount is partly structural - a single quarter can't produce it.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SECTION 02: CONCENTRATION ========== -->
+  <section class="block">
+    <div class="sec-head"><div class="sec-num">02</div><div>
+      <div class="sec-eyebrow">Concentration - Where is the money tied up?</div>
+      <h2 class="sec-title">Sponsorship drives <span class="o">80%</span> of outstanding receivables - revenue-type dependency, not outstanding amountor concentration.</h2>
+    </div></div>
+    <div class="sec-body">
+      <p class="sec-lead">The receivables book is overwhelmingly concentrated in one revenue type, but no single customer dominates.</p>
+      <div class="viz">
+        <div class="chart-card">
+          <div class="ct">Outstanding Receivables by Revenue Group</div>
+          <div class="cs">Share of the $2.02M outstanding balance</div>
+          <div class="chart-box"><canvas id="chart02"></canvas></div>
+        </div>
+        <div class="insight"><div class="ih">Highlighted Insights</div>
+          <div class="ins o"><span class="dot"></span><p><b>Sponsorship = $1.62M (80%)</b> of all outstanding receivables. Major Sponsorship alone is 43% - above the 25% concentration-risk threshold. If sponsorship billing stumbles, 80% of receivables are exposed simultaneously.</p></div>
+          <div class="ins g"><span class="dot"></span><p><b>Customer concentration is low - a clear strength.</b> The top customer with money outstanding holds only 1.7% of the book, and it takes 170 members (45%) to reach 80%. No single member's failure would materially damage receivables.</p></div>
+          <div class="ins b"><span class="dot"></span><p>The risk comes from <b>one revenue type</b>, not from one large customer. This means the Guild should focus on sponsorship billing and follow-up, rather than worrying about a single customer failure.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SECTION 03: TIMING EFFECT ========== -->
+  <section class="block">
+    <div class="sec-head"><div class="sec-num">03</div><div>
+      <div class="sec-eyebrow">Collections - Maturity Check</div>
+      <h2 class="sec-title">March's 26.5% collection rate is a <span class="o">timing effect</span>, not a collection collapse.</h2>
+    </div></div>
+    <div class="sec-body">
+      <p class="sec-lead">Collection rate by issue month measures what share of each month's billing has been paid by the snapshot - it is affected by how much time each invoice has had to be paid.</p>
+      <div class="callout"><b>Two metrics, two stories:</b> Issue-month collection rate and on-time collection rate are different measures. Issue-month rate is affected by how long invoices have had before payment is due (newer invoices often have not reached their due date yet, which lowers the rate). On-time collection measures punctuality among invoices that have already been paid - it is not affected by maturity. Sections 03 and 04 separate these clearly.</div>
+      <div class="viz">
+        <div class="chart-card">
+          <div class="ct">Collection Rate by Issue Month</div>
+          <div class="cs">How much of each month's invoicing has been collected by 31 Mar 2026</div>
+          <div class="chart-box sm"><canvas id="chart03"></canvas></div>
+        </div>
+        <div class="insight"><div class="ih">Highlighted Insights</div>
+          <div class="ins o"><span class="dot"></span><p><b>March invoices couldn't have been collected yet.</b> They were still within their 14-30 day terms at the snapshot - many weren't due until April. The 26.5% is timing, not failure.</p></div>
+          <div class="ins b"><span class="dot"></span><p><b>January's 84.7% is the mature reference point.</b> With a full quarter to be paid, January's cohort shows what collection looks like once invoices have had time to settle.</p></div>
+          <div class="ins n"><span class="dot"></span><p><b>Do not act on March 26.5% as a problem.</b> Re-measure the March cohort at end-April once those invoices pass their terms. If it remains below 70%, then investigate.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SECTION 04: ON-TIME IMPROVEMENT ========== -->
+  <section class="block">
+    <div class="sec-head"><div class="sec-num">04</div><div>
+      <div class="sec-eyebrow">Collections - The Reliable Signal</div>
+      <h2 class="sec-title">On-time collection <span class="g">improved from 40% to 64%</span> - payment follow-up strengthened.</h2>
+    </div></div>
+    <div class="sec-body">
+      <p class="sec-lead">Unlike the issue-month rate, on-time collection measures punctuality of actually paid invoices - unaffected by invoice maturity. This is the reliable performance signal.</p>
+      <div class="viz">
+        <div class="chart-card">
+          <div class="ct">On-Time Collection Rate by Month</div>
+          <div class="cs">Of invoices paid in each month, what share settled by or before the due date</div>
+          <div class="chart-box sm"><canvas id="chart04"></canvas></div>
+        </div>
+        <div class="insight"><div class="ih">Highlighted Insights</div>
+          <div class="ins g"><span class="dot"></span><p><b>On-time rose from 39.76% (Jan) to 64.19% (Mar)</b> - a 24-point improvement. Members paid more punctually as the quarter progressed. This is the opposite of the collection-rate pattern, and it's the more trustworthy signal.</p></div>
+          <div class="ins b"><span class="dot"></span><p><b>Standard-tier members remain the latest payers</b> relative to their terms (4.7 days after due date on 14-day terms), but this sits within the improving overall trajectory.</p></div>
+          <div class="ins b"><span class="dot"></span><p><b>Sustain this improvement.</b> Identify what drove it (process change, seasonal, specific segments) and formalise it. If on-time drops below 50% next quarter, investigate immediately.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SECTION 05: FORECAST ========== -->
+  <section class="block">
+    <div class="sec-head"><div class="sec-num">05</div><div>
+      <div class="sec-eyebrow">Forecast - When does the money arrive?</div>
+      <h2 class="sec-title"><span class="g">80% of the book clears by mid-April</span> - even under stress, no multi-month cash crisis.</h2>
+    </div></div>
+    <div class="sec-body">
+      <p class="sec-lead">A payment-timing-based collection forecast projects when the $2.02M will convert to cash, with scenario testing for sponsorship delays.</p>
+      <div class="viz">
+        <div class="chart-card">
+          <div class="ct">Base Case: Cumulative % of Book Collected</div>
+          <div class="cs">Projected week-by-week cash build-up toward the full $2.02M</div>
+          <div class="chart-box sm"><canvas id="chart05"></canvas></div>
+        </div>
+        <div class="insight"><div class="ih">Highlighted Insights</div>
+          <div class="ins g"><span class="dot"></span><p><b>Base case: 80% by 13 April, 98% by 27 April.</b> Most of the book clears within four weeks of the snapshot.</p></div>
+          <div class="ins o"><span class="dot"></span><p><b>Stress scenario (sponsorship +14d):</b> 80% slips to 27 April, with <b>$304K of additional cash delayed</b> vs base - the tangible cost of sponsorship concentration.</p></div>
+          <div class="ins b"><span class="dot"></span><p><b>52% of the forecast rests on individual member history;</b> 48% uses member-tier estimate. Week-1 is dominated by $861K overdue backlog - money that should already be in.</p></div>
+        </div>
+      </div>
+      <div class="callout"><b>Scenario summary:</b> Conservative (+7d all): 80% by 20 April, 98% by 4 May. Stress (sponsorship +14d, others +7d): 80% by 27 April, 98% by 11 May. Even under stress, no multi-month collection crisis - but sponsorship delays create short-term short-term cash pressure.</div>
+      <div class="callout"><b>Forecast confidence:</b> Moderate. 52% of expected collections are based on individual member payment history, while 48% use member-tier estimate assumptions. The forecast should be used for <b>short-term cash planning</b>, not as a precise prediction. Actual collection dates may vary, especially for member-tier estimates where individual behaviour is unknown.</div>
+    </div>
+  </section>
+
+</div><!-- /wrap -->
+
+<!-- ========== DIAGNOSTIC BAND ========== -->
+<section class="diag-band"><div class="wrap">
+  <div class="sec-head"><div class="sec-num">Dx</div><div>
+    <div class="sec-eyebrow">Diagnosis - Cause Analysis</div>
+    <h2 class="sec-title">Over-limit exposure is a <span style="color:#FDBA74">credit-limit design gap</span>, not poor payment behaviour.</h2>
+  </div></div>
+  <p class="sec-lead" style="margin-left:50px">128 of 382 members (34%) exceed their credit limit, tying up $1.23M - 61% of all outstanding receivables. Three steps trace the main cause.</p>
+  <div class="steps">
+    <div class="step s1">
+      <div class="n">STEP 1 - CONFIRM</div>
+      <h4>Is the problem real?</h4>
+      <div class="q">"How many members are over their credit limit?"</div>
+      <p>128 of 382 members with open balances (34%) exceed their assigned credit limit. Their combined outstanding receivables is $1.23M - 61% of all receivables. Peak utilisation reaches 926%. Overdue is spread proportionally across all tiers - not localised to one segment.</p>
+      <div class="out"><b>-></b> Yes - a third of members with balances are over their limit, holding the majority of outstanding receivables.</div>
+    </div>
+    <div class="step s2">
+      <div class="n">STEP 2 - ISOLATE</div>
+      <h4>Where does it concentrate?</h4>
+      <div class="q">"Which tiers are worst affected?"</div>
+      <p>Associate and Standard tiers are hardest hit. A single $7,725 sponsorship invoice exceeds an Associate limit ($2,000, x3.9) and a Standard limit ($5,000, x1.5). Premium and Corporate limits absorb it - Corporate has zero over-limit members.</p>
+      <div class="out"><b>-></b> The problem hits tiers where limits are too small for sponsorship invoices.</div>
+    </div>
+    <div class="step s3">
+      <div class="n">STEP 3 - EXPLAIN</div>
+      <h4>Why is it happening?</h4>
+      <div class="q">"Are these poor payers, or bad limits?"</div>
+      <p>This is a mismatch between invoice size and credit limits. Two unpaid sponsorship invoices push any Standard or Associate member over their limit regardless of payment behaviour. The limits weren't sized for sponsorship-scale billing.</p>
+      <div class="out"><b>-></b> The fix is <b>credit-limit policy</b>, not collections.</div>
+    </div>
+  </div>
+  <div class="diag-viz">
+    <div class="ct">Max Invoice ($7,725) as % of Credit Limit by Tier</div>
+    <div class="cs">Anything above 100% means a single sponsorship invoice can breach the limit</div>
+    <div class="diag-chart"><canvas id="chartDx"></canvas></div>
+  </div>
+  <div class="root">
+    <div class="rl">✓ Main Cause - Supported by Evidence</div>
+    <p>The 34% over-limit rate is a <b>limit-setting effect</b>. Credit limits were set by tier without accounting for sponsorship-scale invoices ($4,235-$7,725). <b>Re-sizing limits to match typical invoice values</b> would eliminate most of the apparent credit-risk exposure without changing a single collection process.</p>
+  </div>
+</div></section>
+
+<div class="wrap">
+
+  <!-- ========== CONCLUSION ========== -->
+  <section class="concl">
+    <div class="sec-head"><div class="sec-num">∑</div><div>
+      <div class="sec-eyebrow">Conclusion</div>
+      <h2 class="sec-title">Five things to take away.</h2>
+    </div></div>
+    <div class="concl-grid">
+      <div class="takeaway tk-b"><div class="tn">01</div><h4>Cash position is sound</h4><p>53% of the $2.02M is not yet due. Only 17.9% of invoices are overdue, and 64% of overdue outstanding amount is under 30 days - fresh and recoverable.</p></div>
+      <div class="takeaway tk-g"><div class="tn">02</div><h4>Payment follow-up is improving</h4><p>On-time collection rose from 40% to 64%. The March collection-rate drop (26.5%) is caused by invoice timing, not a real decline.</p></div>
+      <div class="takeaway tk-o"><div class="tn">03</div><h4>Sponsorship = 80% of outstanding receivables</h4><p>Concentration is by revenue type, not by customer (top customer with money outstanding 1.7%). Under stress, a 14-day sponsorship delay traps $304K of cash.</p></div>
+      <div class="takeaway tk-o"><div class="tn">04</div><h4>Over-limit is a policy gap</h4><p>128 members exceed limits, but the main cause is limits undersized for $7,725 sponsorship invoices - not poor payers. Fix the limits, not the collectors.</p></div>
+      <div class="takeaway tk-g"><div class="tn">05</div><h4>Cash clears in about 4 weeks</h4><p>80% by mid-April (base case). Even stress reaches 80% within April. First-week backlog of $861K needs immediate chase.</p></div>
+    </div>
+
+    <!-- ========== RECOMMENDATIONS (IMPROVED) ========== -->
+    <div class="recs"><h3>Six actions to take now</h3><ol>
+      <li><span><b>Re-size credit limits for sponsorship-scale billing.</b><br><em style="color:#93C5FD;font-size:12px">Why it matters</em> 34% of members are over their limit because limits weren't sized for $4K-$8K sponsorship invoices.<br><em style="color:#93C5FD;font-size:12px">Next step</em> Align Associate/Standard limits to typical sponsorship invoice values, or create sponsorship-specific limits.<br><em style="color:#93C5FD;font-size:12px">How / Expected outcome</em> Finance Manager; over-limit rate drops from 34% to &lt;10%, $1.23M shown as at risk reduces proportionally.<br><em style="color:#93C5FD;font-size:12px">Timeline</em> Immediate</span></li>
+      <li><span><b>Chase the $607K of 1-30 day overdue immediately.</b><br><em style="color:#93C5FD;font-size:12px">Why it matters</em> This is the freshest, most recoverable overdue outstanding amount - 284 invoices averaging ~15 days past due.<br><em style="color:#93C5FD;font-size:12px">Next step</em> Automated reminder at day 7, phone follow-up at day 21.<br><em style="color:#93C5FD;font-size:12px">How / Expected outcome</em> AR Officer; recover 80-90% within 2 weeks, prevent $607K from aging into the harder 31-60 day bucket.<br><em style="color:#93C5FD;font-size:12px">Timeline</em> Immediate</span></li>
+      <li><span><b>Build a sponsorship-specific collection process.</b><br><em style="color:#93C5FD;font-size:12px">Why it matters</em> Sponsorship is 80% of outstanding receivables - the Guild's cash position IS sponsorship collection performance.<br><em style="color:#93C5FD;font-size:12px">Next step</em> Earlier invoicing (60 days before event), milestone payments for major sponsorships, named collector for top 20 accounts.<br><em style="color:#93C5FD;font-size:12px">How / Expected outcome</em> Sponsorship + Finance; reduced sponsorship-specific average collection time, forecast stabilises (currently shifts 2 weeks under stress).<br><em style="color:#93C5FD;font-size:12px">Timeline</em> This quarter</span></li>
+      <li><span><b>Do not treat March's 26.5% issue-month collection rate as a failure.</b><br><em style="color:#93C5FD;font-size:12px">Why it matters</em> March invoices hadn't reached their due dates yet - the drop is invoice timing, not performance decline.<br><em style="color:#93C5FD;font-size:12px">Next step</em> Re-measure at end-April once those invoices mature. Only investigate if it remains below 70% after those invoices have had enough time to be paid.<br><em style="color:#93C5FD;font-size:12px">How / Expected outcome</em> Financial Analyst; avoid a false alarm, preserve management attention for the genuine risks.<br><em style="color:#93C5FD;font-size:12px">Timeline</em> This quarter</span></li>
+      <li><span><b>Sustain the on-time collection improvement (40% -> 64%).</b><br><em style="color:#93C5FD;font-size:12px">Why it matters</em> This 24-point improvement is a genuine positive trend in payment punctuality.<br><em style="color:#93C5FD;font-size:12px">Next step</em> Identify what drove it and formalise. If on-time drops below 50% next quarter, investigate immediately.<br><em style="color:#93C5FD;font-size:12px">How / Expected outcome</em> Finance Manager; the overdue outstanding balance could shrink by $150K-$300K per quarter if the improvement continues.<br><em style="color:#93C5FD;font-size:12px">Timeline</em> Next quarter</span></li>
+      <li><span><b>Review Standard-tier payment terms for sponsorship invoices.</b><br><em style="color:#93C5FD;font-size:12px">Why it matters</em> Standard members average 4.7 days after due date on 14-day terms - the latest of any tier relative to their deadline.<br><em style="color:#93C5FD;font-size:12px">Next step</em> Consider extending to 21 days or offering a 2% early-payment discount for sponsorship-value invoices.<br><em style="color:#93C5FD;font-size:12px">How / Expected outcome</em> Membership + Finance; fewer invoices classified as "overdue" without changing actual collection timing.<br><em style="color:#93C5FD;font-size:12px">Timeline</em> Next quarter</span></li>
+    </ol></div>
+  </section>
+  <!-- ========== DATA NOTES & LIMITATIONS (NEW - moved from footer) ========== -->
+  <section class="notes-section">
+    <div class="sec-head"><div class="sec-num" style="background:var(--gray-soft);color:var(--ink-3)">⚠</div><div>
+      <div class="sec-eyebrow">Transparency</div>
+      <h2 class="sec-title" style="font-size:22px">Data Notes and Limitations</h2>
+    </div></div>
+    <div class="sec-body">
+      <div class="notes-grid">
+        <div class="note-item"><span class="ni-dot"></span><span><b>Single-quarter analysis only.</b> Three monthly data points are a snapshot, not a trajectory. Cannot establish long-term trends or seasonality.</span></div>
+        <div class="note-item"><span class="ni-dot"></span><span><b>Synthetic dataset</b> modelled on a realistic Xero/BAS-style export. The process and method are identical to production; numbers are illustrative.</span></div>
+        <div class="note-item"><span class="ni-dot"></span><span><b>Forecast is based on payment timing</b>, not machine learning - appropriate for single-quarter data. 52% uses member history; 48% uses tier-average fallback.</span></div>
+        <div class="note-item"><span class="ni-dot"></span><span><b>Payment timing is partly modelled.</b> Lags were reconstructed during cleaning for corrupted rows. Collection-speed metrics are indicative, not fully observed.</span></div>
+        <div class="note-item"><span class="ni-dot"></span><span><b>Unknown records exist:</b> 181 Unknown-industry customers, 75 Unknown-category invoices (imputed during cleaning). Real shares are understated.</span></div>
+        <div class="note-item"><span class="ni-dot"></span><span><b>Credit limits are tier-based proxies</b> ($2K-$20K), not formally credit-assessed. "Over limit" signals relative exposure, not a credit breach.</span></div>
+        <div class="note-item"><span class="ni-dot"></span><span><b>No 90+ day overdue</b> partly reflects the 90-day analysis window - no invoice can structurally exceed ~90 days overdue. Aging severity is a lower bound.</span></div>
+        <div class="note-item"><span class="ni-dot"></span><span><b>GST sourced from invoice data</b>, not derived. GST-free items carry GST = 0. Outstanding GST = sum of the actual GST column on unpaid invoices.</span></div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /wrap -->
+
+
+<script>
+Chart.register(ChartDataLabels);
+const C = {
+  blue:'#2563EB', blueSoft:'#BFDBFE', orange:'#EA580C', green:'#16A34A',
+  gray:'#CBD5E1', grayDark:'#94A3B8', ink:'#0F172A', ink3:'#64748B'
+};
+Chart.defaults.font.family = "'Inter',sans-serif";
+Chart.defaults.color = C.ink3;
+const noGrid = { grid:{display:false,drawBorder:false}, border:{display:false} };
+
+function dominanceBar(ctx, labels, pct, highlightIdx, accentColor){
+  const ac = accentColor || C.blue;
+  return new Chart(ctx,{ type:'bar',
+    data:{ labels, datasets:[{ data:pct, borderRadius:6, barThickness:30,
+      backgroundColor:pct.map((_,i)=>i===highlightIdx?ac:C.gray) }]},
+    options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false, layout:{padding:{right:42}},
+      plugins:{ legend:{display:false}, tooltip:{enabled:false},
+        datalabels:{ anchor:'end', align:'end', font:{weight:'700',size:13},
+          color:c=>c.dataIndex===highlightIdx?ac:C.grayDark, formatter:v=>v+'%' }},
+      scales:{ x:{display:false,max:100}, y:{...noGrid,
+        ticks:{font:{weight:'600',size:13}, color:c=>c.index===highlightIdx?C.ink:C.ink3}} }}});
+}
+
+function statusBar(ctx, labels, vals, highlightIdx, good, suffix){
+  suffix = suffix || '%';
+  return new Chart(ctx,{ type:'bar',
+    data:{ labels, datasets:[{ data:vals, borderRadius:6, barThickness:54,
+      backgroundColor:vals.map((_,i)=>i===highlightIdx?(good?C.green:C.orange):C.gray) }]},
+    options:{ responsive:true, maintainAspectRatio:false, layout:{padding:{top:26}},
+      plugins:{ legend:{display:false}, tooltip:{enabled:false},
+        datalabels:{ anchor:'end', align:'top', offset:4, font:{weight:'700',size:14},
+          color:c=>c.dataIndex===highlightIdx?(good?C.green:C.orange):C.ink3,
+          formatter:v=> (typeof v==='number' && v%1!==0 ? v.toFixed(1) : v) + suffix }},
+      scales:{ y:{display:false}, x:{...noGrid, ticks:{font:{weight:'600',size:13}}} }}});
+}
+
+dominanceBar(document.getElementById('chart01'),
+  ['Current (not due)','1-30 days','31-60 days','61-90 days'],
+  [53.2, 30.1, 11.8, 4.9], 0, C.blue);
+
+dominanceBar(document.getElementById('chart02'),
+  ['Sponsorship','Membership','Unknown','Events','Other'],
+  [80.0, 13.1, 4.8, 1.6, 0.5], 0, C.orange);
+
+statusBar(document.getElementById('chart03'),
+  ['Jan','Feb','Mar'], [84.7, 74.3, 26.5], 2, false);
+
+statusBar(document.getElementById('chart04'),
+  ['Jan','Feb','Mar'], [39.8, 46.5, 64.2], 2, true);
+
+statusBar(document.getElementById('chart05'),
+  ['W1 (30 Mar)','W2 (6 Apr)','W3 (13 Apr)','W4 (20 Apr)','W5 (27 Apr)','May'],
+  [55.5, 71.6, 82.2, 91.1, 98.0, 100.0], 4, true);
+
+(function(){
+  const ctx = document.getElementById('chartDx');
+  const labels = ['Associate (limit $2K)','Standard (limit $5K)','Premium (limit $10K)','Corporate (limit $20K)'];
+  const vals = [386, 155, 77, 39];
+  new Chart(ctx,{ type:'bar',
+    data:{ labels, datasets:[{ data:vals, borderRadius:5, barThickness:30,
+      backgroundColor:vals.map(v=> v>100 ? C.orange : C.green) }]},
+    options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false, layout:{padding:{right:52}},
+      plugins:{ legend:{display:false}, tooltip:{enabled:false},
+        datalabels:{ anchor:'end', align:'end', font:{weight:'700',size:13},
+          color:c=> vals[c.dataIndex]>100 ? '#FDBA74' : '#4ADE80',
+          formatter:v=> v+'%' + (v>100?' ⚠':'') }},
+      scales:{ x:{display:false, max:420}, y:{...noGrid,
+        ticks:{font:{weight:'600',size:11.5},
+          color:c=> vals[c.index]>100 ? '#fff' : '#94A3B8'}} }}});
+})();
+</script>
+</body>
+</html>
