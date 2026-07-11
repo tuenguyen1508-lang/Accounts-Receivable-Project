@@ -303,11 +303,7 @@ The short-term cash flow forecast projects that most open receivables will clear
 
 - **Python:** Built an automated data pipeline to clean raw invoice data, validate data quality, generate forecast tables, and load refreshed outputs into Supabase.
 
-- **Pandas:** Used for data transformation, joins, aggregations, payment-lag calculations, and weekly cash flow forecast generation.
-
 - **Supabase / PostgreSQL:** Used as the cloud database layer to store the cleaned star schema, including fact tables, dimension tables, forecast tables, relationships, constraints, and indexes.
-
-- **SQL:** Created the PostgreSQL schema script to define tables, primary keys, foreign keys, data-quality rules, and performance indexes.
 
 - **Power BI:** Built the interactive dashboard covering AR overview, collections performance, debtor risk, and cash flow forecasting.
 
@@ -320,8 +316,6 @@ The short-term cash flow forecast projects that most open receivables will clear
 - **Data Modelling:** Designed a star-schema model linking invoice facts, customer/category/status/date dimensions, and forecast outputs.
 
 - **AI-Assisted Reporting / Claude:** Used structured skills to support the generation of a business analysis report and consultant-style slide deck, then reviewed and refined outputs for accuracy.
-
-- **GitHub:** Documented and organised the project as a portfolio-ready analytics case study.
 
 ---
 
